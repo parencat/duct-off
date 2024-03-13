@@ -1,0 +1,9 @@
+{:duct.profile/base
+ {:duct.core/project-ns    duct-off
+  :duct-off.api/off-server {:port 3000}}
+
+ :fx.module/autowire {:root duct-off}
+
+ :duct.profile/dev   #duct/include "dev"
+ :duct.profile/local #duct/include "local"
+ :duct.profile/prod  {}}
