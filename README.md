@@ -1,6 +1,5 @@
 # duct-off
 
-FIXME: description
 
 ## Developing
 
@@ -34,7 +33,6 @@ Run `go` to prep and initiate the system.
 
 ```clojure
 dev=> (go)
-:duct.server.http.jetty/starting-server {:port 3000}
 :initiated
 ```
 
@@ -48,23 +46,3 @@ dev=> (reset)
 :reloading (...)
 :resumed
 ```
-
-### Testing
-
-Testing is fastest through the REPL, as you avoid environment startup
-time.
-
-```clojure
-dev=> (test)
-...
-```
-
-But you can also run tests through Leiningen.
-
-```sh
-lein test
-```
-
-## Legal
-
-Copyright © 2024 FIXME

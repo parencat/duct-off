@@ -7,7 +7,8 @@
                  [duct/core "0.8.0"]
                  [io.github.parencat/fx "0.1.8"]
                  [http-kit "2.3.0"]
-                 [compojure "1.7.1"]]
+                 [compojure "1.7.1"]
+                 [hiccup "1.0.5"]]
 
   :plugins [[duct/lein-duct "0.12.3"]]
   :middleware [lein-duct.plugin/middleware]
