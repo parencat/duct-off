@@ -2,6 +2,7 @@
   (:require
    [org.httpkit.server :as server]
    [ring.util.response :as r]
+   [ring.middleware.params :refer [wrap-params]]
    [hiccup.core :as h]
    [compojure.core :refer [defroutes GET routes wrap-routes]]
    [compojure.route :as route]
@@ -10,26 +11,33 @@
 
 (defn wrap-hx-page [handler]
   (fn [request]
-    (let [not-hx? (not (some-> request (get-in [:headers "hx-request"]) parse-boolean))
-          result  (cond-> (handler request)
-                          not-hx? (update :body ui/base-page))]
-      (-> (update result :body #(h/html %))
-          (r/content-type "text/html")))))
+    (let [not-hx?  (not (some-> request (get-in [:headers "hx-request"]) parse-boolean))
+          response (cond-> (handler request)
+                     not-hx? (update :body ui/base-page))]
+      (-> (update response :body #(h/html %))
+          (r/content-type "text/html")
+          (r/status 200)))))
 
 
 (def ui-routes
   (routes
    (GET "/" []
-     (r/response (ui/home-page)))
+     (-> (ui/home-page)
+         (r/response)))
 
    (GET "/preview" [file]
      (-> (ui/preview-page file)
-         (r/response)
-         (r/header "HX-Trigger-After-Swap" "highlightCode")))))
+         (r/response)))
+
+   (GET "/file-preview" [file]
+     (-> (ui/file-viewer file)
+         (r/response)))))
 
 
 (defroutes app-routes
-  (wrap-routes ui-routes wrap-hx-page)
+  (-> ui-routes
+      (wrap-params)
+      (wrap-routes wrap-hx-page))
   (route/resources "/public")
   (route/not-found "Page not found"))
 
